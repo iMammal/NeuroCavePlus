@@ -33,6 +33,7 @@ var init = function () {
                     modelRight.createGroups();
                     initControls();
                     initCanvas();
+                    startPollingSelection();
                 })
             ;
         });
@@ -63,6 +64,29 @@ var parse = function (callback) {
 
     callback(null, null);
 };
+
+var currentSelectedIndex = null;
+function pollSelectedIndex() {
+    fetch('/api/select')
+        .then(res => res.json())
+        .then(data => {
+            const index = parseInt(data.index);
+            if (!isNaN(index) && index !== currentSelectedIndex) {
+                currentSelectedIndex = index;
+                if (typeof previewAreaLeft !== 'undefined' && previewAreaLeft.NodeManager) {
+                    previewAreaLeft.NodeManager.select(index);
+                }
+                if (typeof previewAreaRight !== 'undefined' && previewAreaRight.NodeManager) {
+                    previewAreaRight.NodeManager.select(index);
+                }
+            }
+        })
+        .catch(err => console.error('Failed to fetch selected index', err));
+}
+
+function startPollingSelection() {
+    setInterval(pollSelectedIndex, 5000);
+}
 
 
 if (isLoaded == 0) {
