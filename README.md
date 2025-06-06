@@ -25,6 +25,25 @@ NeuroCavePlus is a work in progress, this prototype was developed for the IEEE 2
 
 Live Demo of NeuroCavePlus with SciVis Contest Data: https://src.dogstarlabs.com/morris/NeuroCave/visualization.html?dataset=SciVisIEEE2023&load=0&lut=viznonet
 
+## Local Development Setup
+
+1. Ensure you have [Node.js](https://nodejs.org/) installed.
+2. Install dependencies from the project root:
+   ```bash
+   npm install
+   ```
+3. Start the backend and serve the frontend:
+   ```bash
+   npm start
+   ```
+   The application will be available at [http://localhost:3273](http://localhost:3273).
+
+### Annotation and Selection API
+
+- **Add a label**: `GET /api/annotations?index=<id>&label=<text>`
+- **Select a node**: `GET /api/select?index=<id>`
+  - The frontend polls `/api/select` every few seconds and will highlight the node when the index changes.
+
 [1] G. Conte, A. Q. Ye, A. G. Forbes, O. Ajilore, and A. Leow. Braintrinsic:
 A virtual reality-compatible tool for exploring intrinsic topologies of
 the human brain connectome. In Y. Guo, K. Friston, F. Aldo, S. Hill,

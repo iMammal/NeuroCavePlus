@@ -10,6 +10,7 @@ const port = 3273; // 8080;
 app.use(bodyParser.json());
 
 let annotations = {};
+let selectedIndex = null;
 
 app.post('/api/annotate', (req, res) => {
   const { node, note } = req.body;
@@ -19,9 +20,25 @@ app.post('/api/annotate', (req, res) => {
 });
 
 app.get('/api/annotations', (req, res) => {
+  const { index, label } = req.query;
+  if (typeof index !== 'undefined' && typeof label !== 'undefined') {
+    annotations[index] = label;
+  }
   res.json(annotations);
   console.log(`CytoCave backend received GET request:${req},${res}.`);
-  
+
+});
+
+app.get('/api/select', (req, res) => {
+  const { index } = req.query;
+  if (typeof index !== 'undefined') {
+    const parsed = parseInt(index, 10);
+    if (!Number.isNaN(parsed)) {
+      selectedIndex = parsed;
+    }
+  }
+  res.json({ index: selectedIndex });
+  console.log(`CytoCave backend received GET select request: ${selectedIndex}`);
 });
 
 app.get('/visualization', (req, res) => {
